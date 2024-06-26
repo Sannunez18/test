@@ -66,3 +66,5 @@ En resumen, esta base de datos proporciona una estructura para organizar y gesti
 */
 
 ### MEDIOS DE RESERVAS
+
+https://miro.com/app/board/uXjVK3m03lM=/?share_link_id=776080637841
