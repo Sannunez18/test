@@ -5,8 +5,8 @@
 
 **Columnas:**
 
-* **Fecha:** Fecha de la reserva (formato YYYY-MM-DD)
-* **TotalReservas:** Número total de reservas realizadas en la fecha indicada
+* **Fecha:** Fecha de la reserva (formato YYYY-MM-DD).
+* **TotalReservas:** Número total de reservas realizadas en la fecha indicada.
 
 **Ejemplo de consulta:**
 
@@ -40,8 +40,8 @@ ORDER BY TotalReservas DESC;
 
 **Columnas:**
 
-* **TIPO_TRABAJO:** Tipo de trabajo (ej. "Alineación", "Chasis competición", etc.)
-* **TotalCancelaciones:** Número total de cancelaciones para el tipo de trabajo
+* **TIPO_TRABAJO:** Tipo de trabajo (ej. "Alineación", "Chasis competición", etc.).
+* **TotalCancelaciones:** Número total de cancelaciones para el tipo de trabajo.
 
 **Ejemplo de consulta:**
 
@@ -78,13 +78,13 @@ SELECT trabajo_cancelado(10);
 
 **Parámetros:**
 
-* **cliente_id:** Identificador único del cliente
-* **fecha_inicio:** Fecha de inicio del intervalo (formato YYYY-MM-DD)
-* **fecha_fin:** Fecha de fin del intervalo (formato YYYY-MM-DD)
+* **cliente_id:** Identificador único del cliente.
+* **fecha_inicio:** Fecha de inicio del intervalo (formato YYYY-MM-DD).
+* **fecha_fin:** Fecha de fin del intervalo (formato YYYY-MM-DD).
 
 **Retorno:**
 
-* Número total de reservas realizadas por el cliente en el intervalo de tiempo especificado
+* Número total de reservas realizadas por el cliente en el intervalo de tiempo especificado.
 
 **Ejemplo de uso:**
 
@@ -94,22 +94,22 @@ SELECT contar_reservas_cliente(5, '2023-12-01', '2023-12-31');
 
 **Nota:** La función no toma en cuenta las cancelaciones de reservas.
 
-### Función: cantidad_mesas_por_restaurante
+### Función: cantidad_puestos_por_taller
 
-**Descripción:** Esta función devuelve la cantidad de mesas que tiene un restaurante.
+**Descripción:** Esta función devuelve la cantidad de puestos que tiene un taller.
 
 **Parámetros:**
 
-* **restaurante_id:** Identificador único del restaurante
+* **puestotaller_id:** Identificador único del puesto en el taller.
 
 **Retorno:**
 
-* Número total de mesas del restaurante
+* Número total de mesas del restaurante.
 
 **Ejemplo de uso:**
 
 ```sql
-SELECT cantidad_mesas_por_restaurante(2);
+SELECT cantidad_puestos_por_taller(2);
 ```
 
 ## Documentación de Triggers 
