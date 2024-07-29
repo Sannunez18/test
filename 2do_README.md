@@ -52,25 +52,25 @@ ORDER BY TotalCancelaciones DESC;
 
 ## Documentación de Funciones 
 
-### Función: mesa_cancelada
+### Función: trabajo_cancelado
 
-**Descripción:** Esta función verifica si una mesa está cancelada para una reserva.
+**Descripción:** Esta función verifica si un trabajo en un determinado taller está cancelado para una reserva.
 
 **Parámetros:**
 
-* **mesa_id:** Identificador único de la mesa
+* **taller_id:** Identificador único del trabajo en determinado taller.
 
 **Retorno:**
 
-* **TRUE** si la mesa está cancelada para alguna reserva, **FALSE** en caso contrario
+* **TRUE** si el trabajo en el taller está cancelado para alguna reserva, **FALSE** en caso contrario.
 
 **Ejemplo de uso:**
 
 ```sql
-SELECT mesa_cancelada(10);
+SELECT trabajo_cancelado(10);
 ```
 
-**Nota:** La función solo verifica si la mesa está cancelada para alguna reserva. No indica si la mesa está disponible para una nueva reserva en este momento.
+**Nota:** La función solo verifica si el trabajo en un taller determinado está cancelado para alguna reserva. No indica si dicho trabajo en dicho taller está disponible para una nueva reserva en este momento.
 
 ### Función: contar_reservas_cliente
 
