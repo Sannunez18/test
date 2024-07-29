@@ -122,7 +122,7 @@ SELECT cantidad_puestos_por_taller(2);
 
 * **Tabla afectada:** CLIENTE
 * **Acción:** INSERT
-* **Información registrada:** Fecha, ID del cliente, Usuario
+* **Información registrada:** Fecha, ID del cliente, Usuario.
 
 **Ejemplo:**
 
@@ -137,7 +137,7 @@ SELECT cantidad_puestos_por_taller(2);
 
 * **Tabla afectada:** RESERVA
 * **Acción:** CANCELACION
-* **Información registrada:** Fecha, ID del cliente (si se conoce), Usuario
+* **Información registrada:** Fecha, ID del cliente (si se conoce), Usuario.
 
 **Ejemplo:**
 
@@ -152,7 +152,7 @@ SELECT cantidad_puestos_por_taller(2);
 
 * **Tabla afectada:** CLIENTE
 * **Acción:** INSERT
-* **Validación:** Correo electrónico único
+* **Validación:** Correo electrónico único.
 
 **Ejemplo:**
 
@@ -161,17 +161,17 @@ SELECT cantidad_puestos_por_taller(2);
 
 ### Trigger: before_insert_reserva_trigger
 
-**Descripción:** Este trigger verifica si un cliente ya tiene una reserva en la misma hora y mesa.
+**Descripción:** Este trigger verifica si un cliente ya tiene una reserva en la misma hora y taller.
 
 **Detalles:**
 
 * **Tabla afectada:** RESERVA
 * **Acción:** INSERT
-* **Validación:** No se permiten reservas duplicadas en la misma hora y mesa para un mismo cliente.
+* **Validación:** No se permiten reservas duplicadas en la misma hora y taller para un mismo cliente.
 
 **Ejemplo:**
 
-* Se intenta reservar una mesa para un cliente que ya tiene una reserva en la misma hora y mesa.
+* Se intenta reservar trabajo para un cliente que ya tiene una reserva en la misma hora y taller.
 * El trigger genera un error y la reserva no se realiza.
 
 
@@ -183,7 +183,7 @@ SELECT cantidad_puestos_por_taller(2);
 
 **Parámetros:**
 
-* **p_email:** Correo electrónico del cliente
+* **por_email:** Correo electrónico del cliente
 
 **Retorno:**
 
@@ -201,8 +201,8 @@ CALL actualizar_reserva_cancelada_por_email('ejemplo@correo.com');
 
 **Parámetros:**
 
-* **p_email:** Correo electrónico del cliente
-* **p_nuevo_tipo:** Nuevo tipo de reserva
+* **por_email:** Correo electrónico del cliente
+* **por_nuevo_tipo:** Nuevo tipo de reserva
 
 **Retorno:**
 
