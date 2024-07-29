@@ -183,11 +183,11 @@ SELECT cantidad_puestos_por_taller(2);
 
 **Parámetros:**
 
-* **por_email:** Correo electrónico del cliente
+* **por_email:** Correo electrónico del cliente.
 
 **Retorno:**
 
-* Mensaje de éxito o error
+* Mensaje de éxito o error.
 
 **Ejemplo de uso:**
 
@@ -201,12 +201,12 @@ CALL actualizar_reserva_cancelada_por_email('ejemplo@correo.com');
 
 **Parámetros:**
 
-* **por_email:** Correo electrónico del cliente
-* **por_nuevo_tipo:** Nuevo tipo de reserva
+* **por_email:** Correo electrónico del cliente.
+* **por_nuevo_trabajo:** Nuevo tipo de trabajo.
 
 **Retorno:**
 
-* Mensaje de éxito o error
+* Mensaje de éxito o error.
 
 **Ejemplo de uso:**
 
@@ -220,10 +220,12 @@ CALL actualizar_tipo_reserva_por_email('ejemplo@correo.com', 'Reserva de Grupo')
 
 **Parámetros:**
 
-* **p_nombre:** Nombre del empleado
-* **p_telefono:** Teléfono del empleado
-* **p_correo:** Correo electrónico del empleado
-* **p_id_restaurante:** Identificador del restaurante al que pertenece el empleado
+* **su_nombre:** Nombre del empleado.
+* **su_telefono:** Teléfono del empleado.
+* **su_correo:** Correo electrónico del empleado.
+* **su_dni:** DNI del empleado.
+* **su_id_taller:** ID del taller en el que trabaja.
+* **su_id_tipotrabajo:** ID del tipo de trabajo que realiza.
 
 **Retorno:**
 
@@ -232,5 +234,5 @@ CALL actualizar_tipo_reserva_por_email('ejemplo@correo.com', 'Reserva de Grupo')
 **Ejemplo de uso:**
 
 ```sql
-CALL crear_empleado('Juan Pérez', '123456789', 'juan.perez@ejemplo.com', 1);
+CALL crear_empleado('Juan Pérez', '123456789', 'juan.perez@ejemplo.com', '23158694', 12, 2);
 ```
