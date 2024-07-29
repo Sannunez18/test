@@ -18,34 +18,35 @@ ORDER BY Fecha ASC;
 
 ### Vista: ReservasPorMesa
 
-**Descripción:** Esta vista muestra la cantidad de reservas realizadas para cada mesa, así como la capacidad total de la mesa.
+**Descripción:** Esta vista muestra la cantidad de reservas realizadas para cada taller, así como la capacidad total del taller.
 
 **Columnas:**
 
-* **IDMesa:** Identificador único de la mesa
-* **Capacidad:** Número de personas que la mesa puede acomodar
-* **TotalReservas:** Número total de reservas realizadas para la mesa
+* **IDTALLER:** Identificador único del taller.
+* **TIPO_TRABAJO:** Descripción del trabajo.
+* **CAPACIDAD:** Tiempo disponible por puesto de trabajo.
+* **TotalReservas:** Número total de reservas realizadas para el taller.
 
 **Ejemplo de consulta:**
 
 ```sql
-SELECT * FROM ReservasPorMesa
+SELECT * FROM ReservasPorTaller
 ORDER BY TotalReservas DESC;
 ```
 
-### Vista: CancelacionesPorTipoReserva
+### Vista: CancelacionesPorTipoTrabajo
 
 **Descripción:** Esta vista muestra la cantidad de cancelaciones para cada tipo de reserva.
 
 **Columnas:**
 
-* **Tipo:** Tipo de reserva (ej. "Normal", "Grupal", etc.)
-* **TotalCancelaciones:** Número total de cancelaciones para el tipo de reserva
+* **TIPO_TRABAJO:** Tipo de trabajo (ej. "Alineación", "Chasis competición", etc.)
+* **TotalCancelaciones:** Número total de cancelaciones para el tipo de trabajo
 
 **Ejemplo de consulta:**
 
 ```sql
-SELECT * FROM CancelacionesPorTipoReserva
+SELECT * FROM CancelacionesPorTipoTrabajo
 ORDER BY TotalCancelaciones DESC;
 ```
 
