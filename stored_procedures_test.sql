@@ -37,7 +37,6 @@ DELIMITER ;
 
 
 DELIMITER //
-
 CREATE PROCEDURE actualizar_tipo_reserva_por_email(
     IN por_email VARCHAR(100),
     IN por_nuevo_trabajo VARCHAR(50)
@@ -45,6 +44,7 @@ CREATE PROCEDURE actualizar_tipo_reserva_por_email(
 BEGIN
     DECLARE cliente_id INT;
     DECLARE reserva_id INT;
+    DECLARE nuevo_puesto_taller_id INT;
     
     -- Obtener el ID del cliente usando el correo electrónico proporcionado
     SELECT IDCLIENTE INTO cliente_id
@@ -59,15 +59,23 @@ BEGIN
         ORDER BY FECHA DESC
         LIMIT 1;
         
-        -- Si se encontró la reserva, actualizar el tipo de reserva
+        -- Si se encontró la reserva, actualizar el tipo de trabajo
         IF reserva_id IS NOT NULL THEN
-            UPDATE RESERVA
-            SET IDPUESTO = (
-                SELECT IDPUESTO FROM TIPO_TRABAJO WHERE TIPO_TRABAJO = por_nuevo_trabajo
-            ) , FECHA = NOW()
-            WHERE IDRESERVA = reserva_id;
+            -- Obtener un IDPUESTOTALLER que corresponda al nuevo tipo de trabajo
+            SELECT IDPUESTOTALLER INTO nuevo_puesto_taller_id
+            FROM PUESTO_TRABAJO_TALLER
+            WHERE IDTIPOTRABAJO = (SELECT IDTIPOTRABAJO FROM TIPO_TRABAJO WHERE TIPO_TRABAJO = por_nuevo_trabajo)
+            LIMIT 1;
             
-            SELECT 'Se actualizó el tipo de reserva del cliente con correo electrónico ', por_email, ' a ', por_nuevo_trabajo, '.';
+            IF nuevo_puesto_taller_id IS NOT NULL THEN
+                UPDATE RESERVA
+                SET IDPUESTOTALLER = nuevo_puesto_taller_id, FECHA = NOW()
+                WHERE IDRESERVA = reserva_id;
+                
+                SELECT 'Se actualizó el tipo de reserva del cliente con correo electrónico ', por_email, ' a ', por_nuevo_trabajo, '.';
+            ELSE
+                SELECT 'No se encontró un puesto de trabajo para el tipo de trabajo especificado.';
+            END IF;
         ELSE
             SELECT 'El cliente con correo electrónico ', por_email, ' no tiene reservas.';
         END IF;
@@ -75,7 +83,6 @@ BEGIN
         SELECT 'No se encontró ningún cliente con el correo electrónico ', por_email, '.';
     END IF;
 END //
-
 DELIMITER ;
 
 
