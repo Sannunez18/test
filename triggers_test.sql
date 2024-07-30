@@ -21,7 +21,7 @@ CREATE TRIGGER after_insert_trigger
 AFTER INSERT ON CLIENTE
 FOR EACH ROW
 BEGIN
-    INSERT INTO LOG_CAMBIOS (tabla_afectada, accion, fecha,idcliente,usuario)
+    INSERT INTO LOG_CAMBIOS (tabla_afectada, accion, fecha, idcliente, usuario)
     VALUES ('CLIENTE', 'INSERT', NOW() , NEW.IDCLIENTE,USER());
 END //
 
@@ -32,17 +32,17 @@ DELIMITER ;
 --  Trigger para almacenar registros modificados si la reserva se cancela
 
 DELIMITER //
-
+    
 CREATE TRIGGER after_update_cancelacion_trigger
 AFTER UPDATE ON RESERVA
 FOR EACH ROW
 BEGIN
     IF OLD.CANCELACION IS NULL AND NEW.CANCELACION IS NOT NULL THEN
-        INSERT INTO LOG_CAMBIOS (tabla_afectada, accion, fecha,idcliente,usuario)
-        VALUES ('RESERVA', 'CANCELACION', NOW());
+        INSERT INTO LOG_CAMBIOS (tabla_afectada, accion, fecha, idcliente, usuario)
+        VALUES ('RESERVA', 'CANCELACION', NOW(), NEW.IDCLIENTE, USER());
     END IF;
 END //
-
+    
 DELIMITER ;
 
 
@@ -68,7 +68,7 @@ END //
 DELIMITER ;
 
 
--- Trigger para verificar si un cliente ya tiene una reserva hecha en la misma hora y taller y que no esté cancelada:
+-- Trigger para verificar si un cliente ya tiene una reserva hecha en la misma hora y taller y que no esté cancelada la reserva:
 
 
 DELIMITER //
@@ -90,5 +90,21 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente ya tiene una reserva en la misma hora y taller.';
     END IF;
 END //
+
+DELIMITER ;
+
+-- Tirgger para verificar si la fecha de cancelación es anterior a la fecha de reserva en update de datos.
+
+DELIMITER //
+
+CREATE TRIGGER before_reserva_update
+BEFORE UPDATE ON RESERVA
+FOR EACH ROW
+BEGIN
+    IF NEW.CANCELACION IS NOT NULL AND NEW.CANCELACION >= NEW.FECHA THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La fecha de cancelación no puede ser posterior a la fecha de reserva';
+    END IF;
+END//
 
 DELIMITER ;
