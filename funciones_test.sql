@@ -1,4 +1,4 @@
-USE proyecto_resevas;
+USE proyecto_reservas;
 
 -- Función para verificar si un trabajo está cancelado:
 DROP FUNCTION IF EXISTS trabajo_cancelado;
@@ -16,7 +16,7 @@ BEGIN
     
     SELECT CANCELACION INTO cancelacion_date
         FROM RESERVA
-        WHERE IDTALLER = taller_id
+        WHERE IDPUESTOTALLER = taller_id
         AND CANCELACION IS NOT NULL
         LIMIT 1;
     
@@ -64,6 +64,11 @@ BEGIN
     SELECT COUNT(*) INTO puestos_count
     FROM PUESTO_TRABAJO_TALLER
     WHERE IDPUESTO = puestotaller_id;
+    
+    RETURN puestos_count;
+END //
+
+DELIMITER ;
     
     RETURN puestos_count;
 END //
