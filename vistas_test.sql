@@ -13,12 +13,11 @@ GROUP BY
     DATE (FECHA);
 
 -- Vista para cantidad de reservas por taller:
--- Esta vista mostrará la cantidad de reservas realizadas para cada taller, así como la capacidad total del taller.
+-- Esta vista mostrará la cantidad de reservas realizadas para cada taller.
 CREATE VIEW
     ReservasPorTaller AS
 SELECT
     PUESTO_TRABAJO_TALLER.IDTALLER,
-    PUESTO_TRABAJO_TALLER.CAPACIDAD,
     TIPO_TRABAJO.TIPO_TRABAJO,
     COUNT(RESERVA.IDRESERVA) AS TotalReservas
 FROM
@@ -27,8 +26,7 @@ FROM
     INNER JOIN TIPO_TRABAJO ON PUESTO_TRABAJO_TALLER.IDTIPOTRABAJO = TIPO_TRABAJO.IDTIPOTRABAJO
 GROUP BY
     PUESTO_TRABAJO_TALLER.IDTALLER,
-    TIPO_TRABAJO.TIPOTRABAJO,
-    PUESTO_TRABAJO_TALLER.CAPACIDAD;
+    TIPO_TRABAJO.TIPO_TRABAJO;
     
 
 -- Vista para cantidad de cancelaciones por tipo de reservas:
