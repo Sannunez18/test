@@ -386,6 +386,21 @@ SELECT cantidad_puestos_por_taller(2);
 
 ### Trigger: after_insert_cliente_trigger
 
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE TRIGGER after_insert_cliente_trigger
+AFTER INSERT ON CLIENTE
+FOR EACH ROW
+BEGIN
+    INSERT INTO LOG_CAMBIOS (TABLA_AFECTADA, ACCION, FECHA, IDCLIENTE, USUARIO)
+    VALUES ('CLIENTE', 'INSERT', NOW() , NEW.IDCLIENTE,USER());
+END //
+
+DELIMITER ;
+```
+
 **Descripción:** Este trigger registra la inserción de un nuevo cliente en la tabla LOG_CAMBIOS.
 
 **Detalles:**
@@ -400,6 +415,23 @@ SELECT cantidad_puestos_por_taller(2);
 * El trigger registra la acción en la tabla LOG_CAMBIOS con los detalles correspondientes.
 
 ### Trigger: after_update_cancelacion_reserva_trigger
+
+**Creación:**
+```sql
+DELIMITER //
+    
+CREATE TRIGGER after_update_cancelacion_reserva_trigger
+AFTER UPDATE ON RESERVA
+FOR EACH ROW
+BEGIN
+    IF OLD.CANCELACION IS NULL AND NEW.CANCELACION IS NOT NULL THEN
+        INSERT INTO LOG_CAMBIOS (TABLA_AFECTADA, ACCION, FECHA, IDCLIENTE, USUARIO)
+        VALUES ('RESERVA', 'CANCELACION', NOW(), NEW.IDCLIENTE, USER());
+    END IF;
+END //
+    
+DELIMITER ;
+```
 
 **Descripción:** Este trigger registra la cancelación de una reserva en la tabla LOG_CAMBIOS.
 
@@ -416,6 +448,28 @@ SELECT cantidad_puestos_por_taller(2);
 
 ### Trigger: before_insert_cliente_trigger
 
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE TRIGGER before_insert_cliente_trigger
+BEFORE INSERT ON CLIENTE
+FOR EACH ROW
+BEGIN
+    DECLARE correo_count INT;
+    
+    SELECT COUNT(*) INTO correo_count
+        FROM CLIENTE
+    WHERE CORREO = NEW.CORREO;
+    
+    IF correo_count > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El correo electrónico ya está en uso.';
+    END IF;
+END //
+
+DELIMITER ;
+```
+
 **Descripción:** Este trigger verifica si el correo electrónico de un nuevo cliente ya está en uso.
 
 **Detalles:**
@@ -431,6 +485,31 @@ SELECT cantidad_puestos_por_taller(2);
 
 ### Trigger: before_insert_reserva_trigger
 
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE TRIGGER before_insert_reserva_trigger
+BEFORE INSERT ON RESERVA
+FOR EACH ROW
+BEGIN
+    DECLARE reserva_count INT;
+    
+    SELECT COUNT(*) INTO reserva_count
+        FROM RESERVA
+    WHERE IDCLIENTE = NEW.IDCLIENTE
+        AND IDPUESTOTALLER = NEW.IDPUESTOTALLER
+        AND FECHA = NEW.FECHA
+        AND CANCELACION IS NULL;
+        
+    IF reserva_count > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente ya tiene una reserva en la misma hora y taller.';
+    END IF;
+END //
+
+DELIMITER ;
+```
+
 **Descripción:** Este trigger verifica si un cliente ya tiene una reserva en la misma hora y taller.
 
 **Detalles:**
@@ -445,6 +524,23 @@ SELECT cantidad_puestos_por_taller(2);
 * El trigger genera un error y la reserva no se realiza.
 
 ### Trigger: before_reserva_update
+
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE TRIGGER before_reserva_update
+BEFORE UPDATE ON RESERVA
+FOR EACH ROW
+BEGIN
+    IF NEW.CANCELACION IS NOT NULL AND NEW.CANCELACION >= NEW.FECHA THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La FECHA de cancelación no puede ser posterior a la FECHA de reserva';
+    END IF;
+END//
+
+DELIMITER ;
+```
 
 **Descripción:** Este trigger verifica que la cancelación sea anterior a fecha.
 
