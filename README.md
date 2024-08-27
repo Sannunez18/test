@@ -253,6 +253,35 @@ ORDER BY nombre_taller, TIPO_PUESTO;
 
 ### Función: trabajo_cancelado
 
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE FUNCTION trabajo_cancelado(taller_id INT) RETURNS BOOLEAN
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE cancelacion_date DATETIME;
+    DECLARE is_cancelada BOOLEAN;
+    
+    SELECT CANCELACION INTO cancelacion_date
+        FROM RESERVA
+        WHERE IDPUESTOTALLER = taller_id
+        AND CANCELACION IS NOT NULL
+        LIMIT 1;
+    
+    IF cancelacion_date IS NOT NULL THEN
+        SET is_cancelada = TRUE;
+    ELSE
+        SET is_cancelada = FALSE;
+    END IF;
+
+    RETURN is_cancelada;
+END //
+
+DELIMITER ;
+```
+
 **Descripción:** Esta función verifica si un trabajo en un determinado taller está cancelado para una reserva.
 
 **Parámetros:**
@@ -272,6 +301,28 @@ SELECT trabajo_cancelado(10);
 **Nota:** La función solo verifica si el trabajo en un taller determinado está cancelado para alguna reserva. No indica si dicho trabajo en dicho taller está disponible para una nueva reserva en este momento.
 
 ### Función: contar_reservas_cliente
+
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE FUNCTION contar_reservas_cliente(cliente_id INT, fecha_inicio DATETIME, fecha_fin DATETIME) RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE reservas_count INT;
+    
+    SELECT COUNT(*) INTO reservas_count
+    FROM RESERVA
+    WHERE IDCLIENTE = cliente_id
+    AND FECHA >= fecha_inicio
+    AND FECHA <= fecha_fin;
+    
+    RETURN reservas_count;
+END //
+
+DELIMITER ;
+```
 
 **Descripción:** Esta función cuenta la cantidad de reservas realizadas por un cliente en un intervalo de tiempo.
 
@@ -294,6 +345,26 @@ SELECT contar_reservas_cliente(5, '2023-12-01', '2023-12-31');
 **Nota:** La función no toma en cuenta las cancelaciones de reservas.
 
 ### Función: cantidad_puestos_por_taller
+
+**Creación:**
+```sql
+DELIMITER //
+
+CREATE FUNCTION cantidad_puestos_por_taller(puestotaller_id INT) RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE puestos_count INT;
+    
+    SELECT COUNT(*) INTO puestos_count
+    FROM PUESTO_TRABAJO_TALLER
+    WHERE IDPUESTO = puestotaller_id;
+    
+    RETURN puestos_count;
+END //
+
+DELIMITER ;
+```
 
 **Descripción:** Esta función devuelve la cantidad de puestos que tiene un taller.
 
